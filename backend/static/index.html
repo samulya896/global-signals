@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101923">
+  <title>Global Signals | Paper Trading Lab</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">GS</span><div><strong>Global Signals</strong><small>Paper Trading Lab</small></div></div>
+    <div class="mode"><span class="pulse"></span> SIMULATION ONLY</div>
+  </header>
+  <main>
+    <section class="intro">
+      <div><p class="eyebrow">NEWS-DRIVEN STRATEGY WORKSPACE</p><h1>Signals to simulated decisions.</h1><p class="muted">Explore how headlines map to rule-based signals, then test decisions with virtual money.</p></div>
+      <button id="refresh" class="button secondary">Refresh dashboard</button>
+    </section>
+    <div id="notice" class="notice" role="status">All orders are simulated. No broker connection or real trades.</div>
+    <section class="metrics" id="metrics" aria-label="Portfolio metrics"></section>
+    <section class="grid">
+      <article class="panel"><div class="panel-heading"><div><p class="eyebrow">MARKET</p><h2>Simulated quotes</h2></div><span class="tag">DETERMINISTIC</span></div><div id="market" class="market-list"></div></article>
+      <article class="panel"><div class="panel-heading"><div><p class="eyebrow">NEWS ANALYSIS</p><h2>Latest signals</h2></div><span class="tag">KEYWORD RULES</span></div><div id="signals" class="signal-list"></div></article>
+    </section>
+    <section class="grid lower-grid">
+      <article class="panel"><div class="panel-heading"><div><p class="eyebrow">PAPER ACCOUNT</p><h2>Place a simulated order</h2></div></div>
+        <form id="trade-form" class="trade-form">
+          <label>Symbol<select name="symbol"><option>NIFTYBEES</option><option>BANKBEES</option><option>ITBEES</option><option>GOLDBEES</option></select></label>
+          <label>Action<select name="side"><option value="buy">Buy</option><option value="sell">Sell</option></select></label>
+          <label>Shares<input name="quantity" type="number" min="1" max="100000" value="1" required></label>
+          <button class="button primary" type="submit">Submit simulated order</button>
+        </form>
+        <p class="hint">Long-only account · $100,000 virtual starting cash · account resets when the server restarts.</p>
+        <h3>Holdings</h3><div id="holdings" class="table-wrap"></div>
+      </article>
+      <article class="panel"><div class="panel-heading"><div><p class="eyebrow">STRATEGY CHECK</p><h2>Synthetic backtest</h2></div><button id="backtest" class="button secondary">Run 90 days</button></div><p class="hint">Uses generated returns for practice. This is not historical market data or evidence of future returns.</p><div id="backtest-result" class="backtest-result">Run the demo to see its return and drawdown.</div><h3>Recent simulated orders</h3><div id="trades" class="table-wrap"></div></article>
+    </section>
+    <footer>Educational simulator · Signals are simple keyword rules, not investment advice.</footer>
+  </main>
+  <script src="/static/app.js" defer></script>
+</body>
+</html>

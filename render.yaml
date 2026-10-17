@@ -1,0 +1,63 @@
+databases:
+  - name: global-signals-db
+    databaseName: global_signals
+    user: global_signals_app
+    plan: 0.5c-1g
+    region: singapore
+    postgresMajorVersion: "17"
+    ipAllowList: []
+
+services:
+  - type: web
+    name: global-signals-api
+    runtime: python
+    region: singapore
+    buildCommand: python -m pip install -e "backend[postgres]"
+    preDeployCommand: python -m alembic -c backend/alembic.ini upgrade head
+    startCommand: python -m uvicorn backend.main:app --host 0.0.0.0 --port $PORT --workers 1
+    healthCheckPath: /api/v1/ready
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: FRONTEND_ORIGINS
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: global-signals-db
+          property: connectionString
+      - key: NEWS_API_KEY
+        sync: false
+      - key: NEWSAPI_PRODUCTION_AUTHORIZED
+        value: "false"
+      - key: UPSTOX_ANALYTICS_TOKEN
+        sync: false
+      - key: UPSTOX_DATA_DISPLAY_AUTHORIZED
+        value: "false"
+      - key: TWELVEDATA_API_KEY
+        sync: false
+      - key: TWELVEDATA_DISPLAY_LICENSE_AUTHORIZED
+        value: "false"
+      - key: TWELVEDATA_API_CREDITS_PER_MINUTE
+        value: "8"
+      - key: SIMULATOR_KILL_SWITCH
+        value: "true"
+      - key: PAPER_TRADING_ENABLED
+        value: "false"
+      - key: STRATEGY_EXECUTION_ENABLED
+        value: "false"
+      - key: SESSION_HOURS
+        value: "12"
+      - key: SIM_STARTING_CASH
+        value: "100000.00"
+      - key: SIM_FEE_BPS
+        value: "10"
+      - key: SIM_SLIPPAGE_BPS
+        value: "5"
+      - key: SIM_FOREX_FEE_BPS
+        value: "10"
+      - key: SIM_FOREX_SLIPPAGE_BPS
+        value: "5"
+      - key: SIM_MAX_ORDER_VALUE
+        value: "25000"
+      - key: SIM_MAX_EXPOSURE_PERCENT
+        value: "90"

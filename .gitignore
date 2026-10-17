@@ -3,6 +3,15 @@ __pycache__/
 *.py[cod]
 .venv/
 venv/
+node_modules/
+frontend/dist/
+*.db
+*.sqlite3
+*.log
+.coverage
+htmlcov/
+dist/
+build/
 
 # Environment variables and secrets
 .env
@@ -16,4 +25,8 @@ Thumbs.db
 
 # Test and tool caches
 .pytest_cache/
+.pytest-run*/
+.pytest-tmp/
 .mypy_cache/
+.ruff_cache/
+*.egg-info/

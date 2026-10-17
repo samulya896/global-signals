@@ -1,0 +1,2 @@
+Alembic migration scripts for Global Signals. Run from the repository root:
+python -m alembic -c backend/alembic.ini upgrade head
