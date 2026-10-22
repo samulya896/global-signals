@@ -236,18 +236,18 @@ export default function BacktestPage() {
                   }))}
                   margin={{ top: 12, right: 14, left: 0, bottom: 0 }}
                 >
-                  <CartesianGrid stroke="#35413b" vertical={false} />
+                  <CartesianGrid stroke="#d8ddd6" vertical={false} />
                   <XAxis
                     dataKey="label"
                     tickLine={false}
                     axisLine={false}
-                    tick={{ fill: "#9ca8a1", fontSize: 10 }}
+                    tick={{ fill: "#66716b", fontSize: 10 }}
                   />
                   <YAxis
                     domain={["auto", "auto"]}
                     tickLine={false}
                     axisLine={false}
-                    tick={{ fill: "#9ca8a1", fontSize: 10 }}
+                    tick={{ fill: "#66716b", fontSize: 10 }}
                     tickFormatter={(value) => `₹${Math.round(value / 1000)}k`}
                     width={48}
                   />
@@ -263,7 +263,7 @@ export default function BacktestPage() {
                   <Area
                     type="monotone"
                     dataKey="equity"
-                    stroke="#77bda9"
+                    stroke="#167663"
                     strokeWidth={2}
                     fill="none"
                   />

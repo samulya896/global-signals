@@ -11,12 +11,12 @@ import {
 } from "recharts";
 import { errorText, money } from "../../lib/formatters";
 import { ErrorState } from "../../components/feedback/ErrorState";
-import { Metric } from "../../components/ui/Metric";
 import { PageTitle } from "../../components/ui/PageTitle";
 import { QuoteTable } from "../../components/tables/QuoteTable";
 import { SignalList } from "../../components/tables/SignalList";
 import { TradeTable } from "../../components/tables/TradeTable";
 import { TableSkeleton } from "../../components/feedback/TableSkeleton";
+import { TableEmpty } from "../../components/feedback/TableEmpty";
 import { useDashboardData } from "./useDashboardData";
 export function DashboardPage() {
   const {
@@ -38,10 +38,10 @@ export function DashboardPage() {
               month: "long",
               year: "numeric",
             })
-            .toUpperCase() + " · PAPER ACCOUNT"
+            .toUpperCase() + " · VIRTUAL ACCOUNT"
         }
         title="Dashboard"
-        subtitle="Portfolio value, market quotes and recent account activity."
+        subtitle="A record of your virtual portfolio, provider data, and recent simulated activity."
         action={
           <button
             className="btn btn-secondary"
@@ -59,59 +59,60 @@ export function DashboardPage() {
       {portfolio.isError && (
         <ErrorState message={`Portfolio: ${errorText(portfolio.error)}`} />
       )}
-      <section className="metrics-grid">
-        <Metric
-          label="PORTFOLIO EQUITY"
-          value={
-            portfolio.data
+      <section className="dashboard-hero" aria-label="Portfolio summary">
+        <div className="equity-lead">
+          <span className="eyebrow">PAPER ACCOUNT · INR</span>
+          <strong>
+            {portfolio.data
               ? money(portfolio.data.equity)
               : portfolio.isLoading
                 ? "Loading…"
-                : "Unavailable"
-          }
-          detail={
-            portfolio.data
-              ? "Virtual cash + marked holdings"
-              : "Account value not available"
-          }
-        />
-        <Metric
-          label="AVAILABLE CASH"
-          value={
-            portfolio.data
-              ? money(portfolio.data.cash)
-              : portfolio.isLoading
-                ? "Loading…"
-                : "Unavailable"
-          }
-          detail="Paper buying power"
-        />
-        <Metric
-          label="INVESTED VALUE"
-          value={
-            portfolio.data
-              ? money(portfolio.data.market_value)
-              : portfolio.isLoading
-                ? "Loading…"
-                : "Unavailable"
-          }
-          detail="Current simulated market value"
-        />
-        <Metric
-          label="TOTAL RETURN"
-          value={
-            perf.data
-              ? `${perf.data.total_return.toFixed(2)}%`
-              : perf.isLoading
-                ? "Loading…"
-                : "Unavailable"
-          }
-          detail={
-            perf.data
-              ? `Realized ${money(perf.data.realized_pnl)} · Unrealized ${money(perf.data.unrealized_pnl)}`
-              : "Performance summary"
-          }
-        />
+                : "Unavailable"}
+          </strong>
+          <span>Current virtual equity</span>
+        </div>
+        <dl className="equity-details">
+          <div>
+            <dt>Available cash</dt>
+            <dd>
+              {portfolio.data
+                ? money(portfolio.data.cash)
+                : portfolio.isLoading
+                  ? "Loading…"
+                  : "Unavailable"}
+            </dd>
+          </div>
+          <div>
+            <dt>Marked holdings</dt>
+            <dd>
+              {portfolio.data
+                ? money(portfolio.data.market_value)
+                : portfolio.isLoading
+                  ? "Loading…"
+                  : "Unavailable"}
+            </dd>
+          </div>
+          <div>
+            <dt>Total return</dt>
+            <dd>
+              {perf.data
+                ? `${perf.data.total_return.toFixed(2)}%`
+                : perf.isLoading
+                  ? "Loading…"
+                  : "Unavailable"}
+            </dd>
+          </div>
+          <div>
+            <dt>Realized / unrealized</dt>
+            <dd className="equity-detail-copy">
+              {perf.data
+                ? `${money(perf.data.realized_pnl)} / ${money(perf.data.unrealized_pnl)}`
+                : perf.isLoading
+                  ? "Loading…"
+                  : "Unavailable"}
+            </dd>
+          </div>
+        </dl>
       </section>
       <section className="dashboard-grid">
         <article className="panel chart-panel">
@@ -128,7 +129,7 @@ export function DashboardPage() {
             <div className="chart-loading" role="status" aria-busy="true">
               Loading recorded account history…
             </div>
-          ) : (
+          ) : history.data?.length ? (
             <>
               <div className="chart-wrap">
                 <ResponsiveContainer width="100%" height="100%">
@@ -145,18 +146,18 @@ export function DashboardPage() {
                     }))}
                     margin={{ top: 15, right: 14, left: 0, bottom: 0 }}
                   >
-                    <CartesianGrid stroke="#35413b" vertical={false} />
+                    <CartesianGrid stroke="#d8ddd6" vertical={false} />
                     <XAxis
                       dataKey="label"
                       tickLine={false}
                       axisLine={false}
-                      tick={{ fill: "#9ca8a1", fontSize: 11 }}
+                      tick={{ fill: "#66716b", fontSize: 11 }}
                     />
                     <YAxis
                       domain={["auto", "auto"]}
                       tickLine={false}
                       axisLine={false}
-                      tick={{ fill: "#9ca8a1", fontSize: 11 }}
+                      tick={{ fill: "#66716b", fontSize: 11 }}
                       tickFormatter={(v) => `₹${Math.round(v / 1000)}k`}
                       width={48}
                     />
@@ -172,7 +173,7 @@ export function DashboardPage() {
                     <Area
                       type="monotone"
                       dataKey="value"
-                      stroke="#77bda9"
+                      stroke="#167663"
                       strokeWidth={2}
                       fill="none"
                     />
@@ -185,6 +186,11 @@ export function DashboardPage() {
                   : `${history.data?.length} persisted snapshots · chart shows account history, not interpolated figures.`}
               </p>
             </>
+          ) : (
+            <TableEmpty>
+              No persisted account snapshots are available yet. The chart will
+              appear after portfolio activity is recorded.
+            </TableEmpty>
           )}
         </article>
         <article className="panel">

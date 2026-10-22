@@ -32,7 +32,7 @@ export function AuthScreen({ onAuthenticated }) {
           <div className="brand-symbol" aria-hidden="true">
             GS
           </div>
-          <div>
+          <div className="brand-copy">
             <b>GLOBAL SIGNALS</b>
             <small>MARKET RESEARCH</small>
           </div>
@@ -91,7 +91,7 @@ export function AuthScreen({ onAuthenticated }) {
             <div className="brand-symbol" aria-hidden="true">
               GS
             </div>
-            <div>
+            <div className="brand-copy">
               <b>GLOBAL SIGNALS</b>
               <small>MARKET RESEARCH</small>
             </div>

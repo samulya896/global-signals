@@ -1,14 +1,19 @@
 .page-transition {
-  animation: page-enter 140ms ease-out both;
+  animation: page-enter var(--duration-medium) var(--ease-standard) both;
 }
 
 .loading-line,
 .loading-block {
   display: block;
-  border-radius: 3px;
-  background: linear-gradient(90deg, #eceae5 25%, #f5f4f1 40%, #eceae5 65%);
-  background-size: 300% 100%;
-  animation: skeleton-shimmer 1.2s ease-in-out infinite;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(
+    100deg,
+    var(--surface-muted) 25%,
+    var(--surface-raised) 45%,
+    var(--surface-muted) 65%
+  );
+  background-size: 250% 100%;
+  animation: skeleton-shimmer 1.7s ease-in-out infinite;
 }
 
 .loading-line {
@@ -38,7 +43,7 @@
   min-height: 188px;
   place-items: center;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .table-skeleton-row {
   display: grid;
@@ -83,8 +88,8 @@
 
 @keyframes page-enter {
   from {
-    opacity: 0.75;
-    transform: translateY(3px);
+    opacity: 0;
+    transform: translateY(5px);
   }
   to {
     opacity: 1;
@@ -93,11 +98,19 @@
 }
 @keyframes skeleton-shimmer {
   to {
-    background-position: -150% 0;
+    background-position: -125% 0;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
   .page-transition,
   .loading-line,
   .loading-block {
@@ -105,6 +118,6 @@
   }
   .loading-line,
   .loading-block {
-    background: #eceae5;
+    background: var(--surface-muted);
   }
 }

@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { MemoryRouter } from "react-router-dom";
 import React from "react";
 import { AppRoutes } from "../app/routes";
+import { Shell } from "../components/layout/Shell";
 
 const emptyPortfolio = {
   mode: "simulation",
@@ -64,6 +65,41 @@ afterEach(() => {
 });
 
 describe("application routes", () => {
+  it("renders the workspace navigation with the current route active", () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (request) => ({
+        ok: true,
+        json: async () => apiResponse(String(request)),
+      })),
+    );
+    const queryClient = new QueryClient({
+      defaultOptions: { queries: { retry: false } },
+    });
+    const rendered = render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter initialEntries={["/markets"]}>
+          <Shell
+            user={{ email: "visual-check@example.test" }}
+            onLogout={vi.fn()}
+          >
+            <h1>Market watch</h1>
+          </Shell>
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    expect(screen.getByRole("navigation", { name: "Main navigation" })).toBeTruthy();
+    expect(
+      screen.getByRole("link", { name: "Markets" }).getAttribute("aria-current"),
+    ).toBe("page");
+    expect(screen.getByText("Paper environment")).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Sign out" })).toBeTruthy();
+
+    rendered.unmount();
+    queryClient.clear();
+  });
+
   it.each([
     ["/", "Dashboard"],
     ["/markets", "Market watch"],
